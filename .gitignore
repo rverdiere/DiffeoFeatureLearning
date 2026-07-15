@@ -1,2 +1,6 @@
-datasets/*
+datasets/sin_norm/*
+datasets/__pycache__/*
+datasets/exp_cos/*
+datasets/cos_exp/*
+datasets/thermalblock/*
 results/*
