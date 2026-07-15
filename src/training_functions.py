@@ -1,7 +1,6 @@
 import torch
 from torch.func import vmap
 import copy
-from losses import poincare_IS, poincare_IS_chol, poincare_FS
 
 def multistart(nb_start, g, dataloader, loss_function, max_epoch=300, learning_rate=0.01, print_freq=100, sig=0.01, lamb_KL=0.01):
     g_list_ms = []
@@ -53,9 +52,9 @@ def train_featuremap(g,dataloader,loss_function,max_epoch=3000,learning_rate=0.0
     for epoch in range(1, max_epoch + 1):
         for x_batch, grad_x_batch, y_batch in dataloader:
             optimizer.zero_grad()
-            if loss_function == poincare_IS or loss_function == poincare_IS_chol:
+            if loss_function.__name__ == "poincare_IS" or loss_function.__name__ == "poincare_IS_chol":
                 loss = loss_function(g, x_batch, grad_x_batch)
-            elif loss_function == poincare_FS:
+            elif loss_function.__name__ == "poincare_FS":
                 loss = loss_function(g, x_batch, grad_x_batch, cov_inv_mat, lamb_KL)
             else:
                 raise ValueError("Unsupported loss function")

@@ -4,35 +4,36 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 import torch.nn as nn
 
-from losses import *
-from training_functions import train_featuremap, train_profilefunc, multistart
-from preprocess_functions import *
-from glow_invnet import glow_invnet
-from coupling_functions import fcnn
-from plot import plot_profile
+from src.losses import *
+from src.training_functions import train_featuremap, train_profilefunc, multistart
+from src.preprocess_functions import *
+from src.glow_invnet import glow_invnet
+from src.coupling_functions import fcnn
+from visu.plot import plot_profile
 
 # ---------------- CPU setup ----------------
 torch.set_num_threads(os.cpu_count())
 torch.set_num_interop_threads(1)
 
 # ---------------- Parameters ----------------
-benchmark_name = "exp_cos"
+benchmark_name = "thermalblock"
+standard_scale=True
 fname = 'datasets/'+benchmark_name+"/"
 fname_results = 'results/'+benchmark_name+"/"
-nb_runs=1
+nb_runs=2
 loss_function=poincare_IS
 m=1
 nb_layer=4
 internal_dim_f = 100
 act_func=nn.Sigmoid()
-batch_size = 80
+batch_size = 50
 max_epochs_g = 150
 max_epochs_f=300
 nb_multistart=4
 max_epochs_ms= 30
 ms_printfreq=10
 learning_rate = 1e-2
-dim_aug=2
+dim_aug=4
 full_test=True
 plot=True
 train_f=True
@@ -66,6 +67,13 @@ param_dict={'Benchmark name': benchmark_name,
 
 losses=[]
 times = []
+if standard_scale==True:
+    with torch.no_grad():
+        x_test, grad_x_test = normalize(x_test, grad_x_test)
+if dim_aug > 0:
+    with torch.no_grad():
+        x_test, grad_x_test = inc_dim(x_test, grad_x_test, dim_aug, out_dim)
+
 for k in range(nb_runs):
     #--------- Loading dataset-------------------
     (x_train, grad_x_train, y_train) = load_dataset(fname, dset=k)
@@ -73,11 +81,15 @@ for k in range(nb_runs):
     _, out_dim = y_train.size()
     print(f"Banchmark function: {benchmark_name}\nTraining samples: {n_train}, Testing samples: {n_test}, Input dimension: {dim}+{dim_aug}, Output dimension: {out_dim}")
     
+    #-------- Normalization----------------------
+    if standard_scale==True:
+        with torch.no_grad():
+            x_train, grad_x_train = normalize(x_train, grad_x_train)
+
     #-------- Dimension augmentation ------------
     if dim_aug > 0:
         with torch.no_grad():
             x_train, grad_x_train = inc_dim(x_train, grad_x_train, dim_aug, out_dim)
-            x_test, grad_x_test = inc_dim(x_test, grad_x_test, dim_aug, out_dim)
     
     #-------- Dataset preparation ---------------
     trainset = TensorDataset(x_train, grad_x_train, y_train)

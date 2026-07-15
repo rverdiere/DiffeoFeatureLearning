@@ -1,20 +1,53 @@
 import torch
-from skopt.sampler import Lhs
 import csv
 import numpy as np
 import os
+import numpy as np
 
-def uniToNormal(X, a=0.1, b=10.0):
-    return torch.distributions.Normal(0, 1).icdf((X-a)/(b-a))
+import torch
 
-def normalToUni(X, a=0.1, b=10.0):
-    return (b-a)*torch.distributions.Normal(0, 1, validate_args=False).cdf(X)+a
+SQRT_2PI = torch.sqrt(torch.tensor(2.0 * torch.pi))
 
-def LHS_sampling(n_samples, dim, l_bound, u_bound):
-    lhs = Lhs(lhs_type='classic', criterion='maximin', iterations=1000) 
-    dim  = [(float(l_bound), float(u_bound)) for k in range(dim)]
-    sample = lhs.generate(dim, n_samples)
-    return torch.tensor(sample, requires_grad=True)
+
+def normal_pdf(z):
+    return torch.exp(-0.5 * z**2) / SQRT_2PI.to(z.device, z.dtype)
+
+
+def transform_inputs(x, a=0.1, b=10.0, eps=1e-7):
+    x = x.to(dtype=torch.get_default_dtype())
+
+    a = torch.as_tensor(a, dtype=x.dtype, device=x.device)
+    b = torch.as_tensor(b, dtype=x.dtype, device=x.device)
+
+    u = (x - a) / (b - a)
+    u = u.clamp(eps, 1.0 - eps)
+
+    # Φ^{-1}(u) = √2 erfinv(2u-1)
+    z = torch.sqrt(torch.tensor(2.0, dtype=x.dtype, device=x.device)) * \
+        torch.erfinv(2.0 * u - 1.0)
+
+    return z
+
+
+def transform_gradients(x, grad_x, a=0.1, b=10.0, eps=1e-7):
+    if x.shape != grad_x.shape:
+        raise ValueError(
+            f"x and grad_x must have the same shape, "
+            f"got {x.shape} and {grad_x.shape}."
+        )
+
+    z = transform_inputs(x, a=a, b=b, eps=eps)
+
+    a = torch.as_tensor(a, dtype=x.dtype, device=x.device)
+    b = torch.as_tensor(b, dtype=x.dtype, device=x.device)
+
+    dx_dz = (b - a) * normal_pdf(z)
+
+    return grad_x * dx_dz
+
+
+def normalize(x, grad_x):
+    return transform_inputs(x), transform_gradients(x, grad_x.squeeze(-1)).unsqueeze(-1)
 
 def load_dataset(fname, dset=None):
     if dset!= None:
@@ -35,6 +68,7 @@ def load_dataset(fname, dset=None):
     grad_x = grad_x.transpose(-1,-2)
 
     return (x, grad_x, y)
+
 
 def inc_dim(x, grad_x, dim_aug, out_dim=1):
     with torch.no_grad():
