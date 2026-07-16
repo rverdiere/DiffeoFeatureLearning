@@ -20,14 +20,45 @@ The project provides
 - training and evaluation code
 - visualization utilities
 
-Our method learns a nonlinear feature map g : X → R^m such that a target function u : X → R^q can be accurately approximated by the composition
+Our method learns a nonlinear feature map $g : \mathcal{X} \rightarrow \mathbb{R}^m$ 
+and a profile function $f : \mathbb{R}^m \rightarrow \mathbb{R}^m$ 
+such that a target function $u : \mathcal{X} → \mathbb{R}^q$ 
+can be accurately approximated by the composition
 
-u(x) ≈ f(g(x))
+$u(x) \approx f(g(x))$
 
-where the latent dimension satisfies m ≤ d.
+for $L^2$ norm, where the latent dimension satisfies $m \leq d$.
 
 The feature map is constrained to be the first coordinates of a learned
 diffeomorphism implemented as an invertible neural network based on
 Block Affine Coupling Flows (BACFs).
 
-For the complete mathematical formulation, see Section 2 and 3of the paper.
+For the complete mathematical formulation, see Section 2 and 3 of the paper.
+
+````markdown
+## Repository Structure
+
+```text
+DiffeoFeatureLearning/
+├── datasets/          # Synthetic datasets and data generation scripts
+├── examples/          # Example notebooks and usage examples
+├── results/           # Results of experiments in csv format
+├── src/
+│   ├── bacf_invnet.py          # Block Affine Coupling Flow implementation
+│   ├── coupling_functions.py   # Coupling layer neural networks
+│   ├── losses.py               # Loss functions
+│   ├── training_functions.py   # Training functions
+│   ├── plot.py                 # Visualization utilities
+│   └── preprocess_functions.py # Preprocessing functions (normalization, dataset loading ...)
+├── main.py            # Main file to run the experiments
+├── requirements.txt   # Python dependencies
+└── README.md
+```
+
+### Main Components
+
+- **`datasets/`** contains utilities for generating the synthetic datasets used in the paper.
+- **`src/`** contains the core implementation of the proposed algorithms including invertible neural networks and Poincaré loss functions.
+- **`examples/`** provides simple examples illustrating how to train and evaluate the models.
+````
+
