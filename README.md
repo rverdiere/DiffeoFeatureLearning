@@ -21,13 +21,13 @@ The project provides
 - visualization utilities
 
 Our method learns a nonlinear feature map $g : \mathcal{X} \rightarrow \mathbb{R}^m$ 
-and a profile function $f : \mathbb{R}^m \rightarrow \mathbb{R}^m$ 
-such that a target function $u : \mathcal{X} → \mathbb{R}^q$ 
+and a profile function $f : \mathbb{R}^m \rightarrow \mathbb{R}^q$ 
+such that a target function $u : \mathcal{X} \rightarrow \mathbb{R}^q$ 
 can be accurately approximated by the composition
 
 $u(x) \approx f(g(x))$
 
-for $L^2$ norm, where the latent dimension satisfies $m \leq d$.
+for the $L^2$ norm. Here the latent dimension satisfies $m \ll d$.
 
 The feature map is constrained to be the first coordinates of a learned
 diffeomorphism implemented as an invertible neural network based on
@@ -35,10 +35,8 @@ Block Affine Coupling Flows (BACFs).
 
 For the complete mathematical formulation, see Section 2 and 3 of the paper.
 
-````markdown
 ## Repository Structure
 
-```text
 DiffeoFeatureLearning/
 ├── datasets/          # Synthetic datasets and data generation scripts
 ├── examples/          # Example notebooks and usage examples
@@ -53,12 +51,11 @@ DiffeoFeatureLearning/
 ├── main.py            # Main file to run the experiments
 ├── requirements.txt   # Python dependencies
 └── README.md
-```
 
 ### Main Components
 
 - **`datasets/`** contains utilities for generating the synthetic datasets used in the paper.
 - **`src/`** contains the core implementation of the proposed algorithms including invertible neural networks and Poincaré loss functions.
 - **`examples/`** provides simple examples illustrating how to train and evaluate the models.
-````
+- **`results/`** contains the simulation results in csv format.
 
