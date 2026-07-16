@@ -37,6 +37,7 @@ For the complete mathematical formulation, see Section 2 and 3 of the paper.
 
 ## Repository Structure
 
+```text
 DiffeoFeatureLearning/
 ├── datasets/          # Synthetic datasets and data generation scripts
 ├── examples/          # Example notebooks and usage examples
@@ -51,6 +52,7 @@ DiffeoFeatureLearning/
 ├── main.py            # Main file to run the experiments
 ├── requirements.txt   # Python dependencies
 └── README.md
+```
 
 ### Main Components
 
