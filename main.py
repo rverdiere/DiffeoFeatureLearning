@@ -9,7 +9,7 @@ from src.training_functions import train_featuremap, train_profilefunc, multista
 from src.preprocess_functions import *
 from src.glow_invnet import glow_invnet
 from src.coupling_functions import fcnn
-from visu.plot import plot_profile
+from src.plot import plot_profile
 
 # ---------------- CPU setup ----------------
 torch.set_num_threads(os.cpu_count())

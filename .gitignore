@@ -3,4 +3,6 @@ datasets/__pycache__/*
 datasets/exp_cos/*
 datasets/cos_exp/*
 datasets/thermalblock/*
+datasets/autoencoders/q16_*/
+datasets/autoencoders/q8_*/
 results/*
