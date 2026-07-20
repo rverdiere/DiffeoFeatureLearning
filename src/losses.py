@@ -102,3 +102,16 @@ def poincare_FS(g, x, x_grad, cov_inv, lamb=0.01):
         PIloss+=(vjp_perp ** 2).sum(dim=1).mean()
     
     return PIloss/grad_norm+lamb*DKL
+
+def poincare_FS_ae(g, x, cov_inv, lamb=1e-2):
+    z = g.diffeo(x)
+    
+    compute_batch_jacobian = vmap(jacrev(g.diffeo_inv), in_dims=(0))
+    jacobian = compute_batch_jacobian(z)[:, g.out_dim:, :]
+    PI= (alg.norm(jacobian, dim=(1,2))**2).mean()
+    
+    norm_phi_sq = torch.diag(z@cov_inv@z.t())
+    logdet = g.log_jacobian(x)
+    DKL =((norm_phi_sq)/2-logdet).mean()
+    
+    return PI+lamb*DKL

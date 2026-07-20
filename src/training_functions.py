@@ -56,6 +56,8 @@ def train_featuremap(g,dataloader,loss_function,max_epoch=3000,learning_rate=0.0
                 loss = loss_function(g, x_batch, grad_x_batch)
             elif loss_function.__name__ == "poincare_FS":
                 loss = loss_function(g, x_batch, grad_x_batch, cov_inv_mat, lamb_KL)
+            elif loss_function.__name__ == "poincare_FS_ae":
+                loss = loss_function(g, x_batch, cov_inv_mat, lamb_KL)
             else:
                 raise ValueError("Unsupported loss function")
             

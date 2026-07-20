@@ -169,7 +169,16 @@ class glow_invnet(nn.Module):
         create_graph=True
         )
         return vjp
-
+    
+    def autoencoder(self, x):
+        n = x.size()[0]
+        z = self.diffeo(x)
+        z_mean= z.mean(dim=0)
+        z_pad = z_mean[self.out_dim:].repeat(n).reshape((n, self.in_dim-self.out_dim)) 
+        z_cut = torch.cat((z[:,:self.out_dim],z_pad), dim=1)
+        x_pred = self.diffeo_inv(z_cut)
+        return z, x_pred
+ 
     def get_theta(self):
         theta = []
         for m in self.seq:

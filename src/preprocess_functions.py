@@ -4,7 +4,6 @@ import numpy as np
 import os
 import numpy as np
 
-import torch
 
 SQRT_2PI = torch.sqrt(torch.tensor(2.0 * torch.pi))
 
@@ -49,6 +48,11 @@ def transform_gradients(x, grad_x, a=0.1, b=10.0, eps=1e-7):
 def normalize(x, grad_x):
     return transform_inputs(x), transform_gradients(x, grad_x.squeeze(-1)).unsqueeze(-1)
 
+def normalize_ae(x):
+    x-=x.min(axis=0)[0]
+    x/=x.max(axis=0)[0]
+    return x
+
 def load_dataset(fname, dset=None):
     if dset!= None:
         x = torch.from_numpy(np.loadtxt(fname+'train_X_dset'+str(dset)+'.csv', delimiter=",", dtype=np.float32)).contiguous()
@@ -68,6 +72,18 @@ def load_dataset(fname, dset=None):
     grad_x = grad_x.transpose(-1,-2)
 
     return (x, grad_x, y)
+
+def load_dataset_ae(fname, dset=None):
+    if dset!= None:
+        x = torch.from_numpy(np.loadtxt(fname+'train_dset'+str(dset)+'.csv', delimiter=",", dtype=np.float32)).contiguous()
+        n,d = x.size()
+        grad_x = torch.eye(d,d).repeat((n,1)).reshape((n,d,d))
+    else:
+        x = torch.from_numpy(np.loadtxt(fname+'test.csv', delimiter=",", dtype=np.float32)).contiguous()
+        n,d = x.size()
+        grad_x = torch.eye(d,d).repeat((n,1)).reshape((n,d,d))
+    
+    return (x, grad_x, x)
 
 
 def inc_dim(x, grad_x, dim_aug, out_dim=1):

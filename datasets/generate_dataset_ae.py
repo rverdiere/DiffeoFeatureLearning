@@ -17,7 +17,7 @@ Q16_FILE = DATA_DIR / "q16.csv"
 
 TRAINING_SET_SIZES = [100, 500]
 NUM_DATASETS_PER_SIZE = 15
-NUM_TEST_POINTS = 10_000
+NUM_TEST_POINTS = 1_000
 
 LOWER_BOUND = -2.0
 UPPER_BOUND = 2.0
@@ -236,25 +236,25 @@ def generate_all_datasets(
 
             print(f"Saved {output_file}")
 
-    # Generate test dataset.
-    test_dataset = generate_quadratic_dataset(
-        num_points=NUM_TEST_POINTS,
-        coefficients=coefficients,
-        lower_bound=LOWER_BOUND,
-        upper_bound=UPPER_BOUND,
-    )
+        # Generate test dataset.
+        test_dataset = generate_quadratic_dataset(
+            num_points=NUM_TEST_POINTS,
+            coefficients=coefficients,
+            lower_bound=LOWER_BOUND,
+            upper_bound=UPPER_BOUND,
+        )
+    
+        test_file = (
+            dataset_dir
+            / "test.csv"
+        )
+    
+        save_tensor_csv(
+            test_dataset,
+            test_file,
+        )
 
-    test_file = (
-        dataset_dir
-        / "test.csv"
-    )
-
-    save_tensor_csv(
-        test_dataset,
-        test_file,
-    )
-
-    print(f"Saved {test_file}")
+        print(f"Saved {test_file}")
 
 
 def main() -> None:
