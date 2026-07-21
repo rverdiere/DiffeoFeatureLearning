@@ -7,7 +7,7 @@ import torch.nn as nn
 from src.losses import *
 from src.training_functions import train_featuremap, train_profilefunc, multistart
 from src.preprocess_functions import *
-from src.glow_invnet import glow_invnet
+from src.bacf_invnet import bacf_invnet
 from src.coupling_functions import fcnn
 from src.plot import plot_profile
 
@@ -97,7 +97,7 @@ for k in range(nb_runs):
     # ---------------- Model ----------------
     
     #Feature map
-    g = glow_invnet(dim+dim_aug, m, nb_layer, fcnn, internal_dim_st=int((dim+dim_aug)/2), nb_layer_st=1)
+    g = bacf_invnet(dim+dim_aug, m, nb_layer, fcnn, internal_dim_st=int((dim+dim_aug)/2), nb_layer_st=1)
 
     # ---------------- Training ----------------
 

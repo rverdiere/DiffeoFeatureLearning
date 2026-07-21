@@ -5,7 +5,7 @@ from torch import vmap
 from torch.func import jacrev
 import numpy as np
 
-class glow_block(nn.Module):
+class bacf_block(nn.Module):
     def __init__(self, dim, s, t):
         super().__init__()
 
@@ -112,7 +112,7 @@ class glow_block(nn.Module):
 
         raise ValueError("Expected 1D or 2D tensor.")
 
-class glow_invnet(nn.Module):
+class bacf_invnet(nn.Module):
     
     def __init__(self, input_dim, output_dim, nb_layer, nn_constructor, internal_dim_st=10, nb_layer_st=3):
         super().__init__()
@@ -124,7 +124,7 @@ class glow_invnet(nn.Module):
         self.nb_layer_st = nb_layer_st
         self.seq = nn.Sequential()
         for i in range(self.nb_layer):
-            self.seq.append(glow_block(self.in_dim, 
+            self.seq.append(bacf_block(self.in_dim, 
                                       nn_constructor(self.dim_cf, self.dim_cf, internal_dim_st, nb_layer_st),
                                       nn_constructor(self.dim_cf, self.dim_cf, internal_dim_st, nb_layer_st)))
     

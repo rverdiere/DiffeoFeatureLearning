@@ -1,0 +1,2 @@
+Benchmark name,Number of runs,Loss function,Latent dimension (m),Number of layers coupling flow,Internal dim profile function,Batch size,Max epochs feature map,Max epochs profile function,Number of multistart feature map,Max epochs multistart,Learning rate,Input dimension,Output dimension,Augmented dimension,Lambda KL poincare FS loss,Sigma covariance matrix poincare FS loss
+sin_norm,2,poincare_FS,1,5,100,50,150,200,4,30,0.01,20,1,0,0.0001,1

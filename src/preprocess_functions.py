@@ -104,14 +104,15 @@ def save_results(losses, times, param_dict, fname, id_run=None):
         print(f"Directory '{fname}' already exists.")
     
 
-    losses = torch.tensor(losses, dtype=torch.float64)
-    times = torch.tensor(times, dtype=torch.float64)
+    #losses = torch.tensor(losses, dtype=torch.float64)
+    #times = torch.tensor(times, dtype=torch.float64)
     print('Saving results in '+fname)
     if id_run != None:
         fname+="run{id_run}_"
 
     with open(fname+'loss.csv', 'w', newline='') as myfile:
         wr = csv.writer(myfile)
+        wr.writerow(['MSE', 'NRMSE', 'RL1', 'RL2'])
         wr.writerows(losses)
     with open(fname+'times.csv', 'w', newline='') as myfile:
         wr = csv.writer(myfile)
