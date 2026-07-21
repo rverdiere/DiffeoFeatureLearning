@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from mpi4py import MPI
+#from mpi4py import MPI
 from dolfinx import fem, mesh
 from dolfinx.fem import functionspace
 import dolfinx.fem.petsc

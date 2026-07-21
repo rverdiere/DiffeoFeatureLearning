@@ -1,0 +1,16 @@
+name: diffeo_feature_learning
+
+channels:
+  - conda-forge
+  - pytorch
+
+dependencies:
+  - python=3.11
+  - numpy
+  - matplotlib
+  - pytorch
+  - scikit-optimize
+  - fenics-dolfinx
+  - mpi4py
+  - jupyter
+  - pip

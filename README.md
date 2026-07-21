@@ -35,12 +35,37 @@ Block Affine Coupling Flows (BACFs).
 
 For the complete mathematical formulation, see Section 2 and 3 of the paper.
 
+## Installation
+
+The thermal-block dataset generator relies on
+[DOLFINx](https://github.com/FEniCS/dolfinx) and MPI. We recommend
+installing the dependencies with Conda through the `conda-forge` channel.
+
+Clone the repository:
+
+```bash
+git clone https://github.com/rverdiere/diffeo_feature_learning.git
+cd diffeo_feature_learning
+```
+
+Create and activate the environment:
+
+```bash
+conda env create -f environment.yml
+conda activate diffeo_feature_learning
+```
+
+Verify the installation:
+
+```bash
+python -c "import dolfinx, mpi4py, numpy, matplotlib, skopt, torch; print('Installatcon successful')"
+```
+
 ## Repository Structure
 
 ```text
 DiffeoFeatureLearning/
 ├── datasets/          # Synthetic datasets and data generation scripts
-├── examples/          # Example notebooks and usage examples
 ├── results/           # Results of experiments in csv format
 ├── src/
 │   ├── bacf_invnet.py          # Block Affine Coupling Flow implementation
@@ -49,8 +74,9 @@ DiffeoFeatureLearning/
 │   ├── training_functions.py   # Training functions
 │   ├── plot.py                 # Visualization utilities
 │   └── preprocess_functions.py # Preprocessing functions (normalization, dataset loading ...)
-├── main.py            # Main file to run the experiments
-├── requirements.txt   # Python dependencies
+├── main.py                 # Main file to run the function approximation experiments
+├── main_autoencoders.py    # Main file to run the autoencoder experiments
+├── environment.yml         # Conda environment 
 └── README.md
 ```
 
@@ -58,6 +84,5 @@ DiffeoFeatureLearning/
 
 - **`datasets/`** contains utilities for generating the synthetic datasets used in the paper.
 - **`src/`** contains the core implementation of the proposed algorithms including invertible neural networks and Poincaré loss functions.
-- **`examples/`** provides simple examples illustrating how to train and evaluate the models.
 - **`results/`** contains the simulation results in csv format.
 
