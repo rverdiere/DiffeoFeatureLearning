@@ -16,7 +16,7 @@ torch.set_num_threads(os.cpu_count())
 torch.set_num_interop_threads(1)
 
 # ---------------- Parameters ----------------
-benchmark_name = "sin_norm"
+benchmark_name = "exp_cos"
 standard_scale=False
 fname = 'datasets/'+benchmark_name+"/"
 fname_results = 'results/'+benchmark_name+"/"
