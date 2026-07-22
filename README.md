@@ -38,7 +38,7 @@ For the complete mathematical formulation, see Section 2 and 3 of the paper.
 ## Installation
 
 The thermal-block dataset generator relies on
-[DOLFINx](https://github.com/FEniCS/dolfinx) and MPI. We recommend
+[DOLFINx](https://github.com/FEniCS/dolfinx),MPI and PETSc. We recommend
 installing the dependencies with Conda through the `conda-forge` channel.
 
 Clone the repository:
@@ -60,12 +60,33 @@ Verify the installation:
 ```bash
 python -c "import dolfinx, mpi4py, numpy, matplotlib, skopt, torch; print('Installatcon successful')"
 ```
+## How to use
+
+The dataset generators can be run with: 
+```bash 
+python datasets/generate_dataset.py 
+python datasets/generate_dataset_thermalblock.py 
+python datasets/generate_dataset_ae.py 
+```
+
+The experiments from Sections 7 can be run with: 
+```bash 
+python main.py
+python main_autoencoders.py
+```
 
 ## Repository Structure
 
 ```text
-DiffeoFeatureLearning/
-├── datasets/          # Synthetic datasets and data generation scripts
+diffeo_feature_learning/
+├── datasets/           
+│   ├── autoencoders/   
+│   │   ├── q8.csv      # Q8 values as defined in Appendix F
+│   │   └── q16.csv     # Q16 values as defined in Appendix F
+│   ├── benchmark_function.py               # Definition of benchmark function from Section 7.1
+│   ├── generate_dataset.py                 # Dataset generation script for scalar valued benchmark function
+│   ├── generate_dataset_thermalblock.py    # Dataset generation script for the thermalblock model
+│   └── generate_dataset_ae.py              # Dataset generation script for the autoencoder example
 ├── results/           # Results of experiments in csv format
 ├── src/
 │   ├── bacf_invnet.py          # Block Affine Coupling Flow implementation
@@ -85,4 +106,6 @@ DiffeoFeatureLearning/
 - **`datasets/`** contains utilities for generating the synthetic datasets used in the paper.
 - **`src/`** contains the core implementation of the proposed algorithms including invertible neural networks and Poincaré loss functions.
 - **`results/`** contains the simulation results in csv format.
+- **`main.py`** Script to run the expiriments from Sections 7.1 and 7.2
+- **`main_autoencoderes.py`** Script to run the expiriments from Sections 7.3
 

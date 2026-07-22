@@ -1,6 +1,6 @@
 from pathlib import Path
 
-#from mpi4py import MPI
+from mpi4py import MPI
 from dolfinx import fem, mesh
 from dolfinx.fem import functionspace
 import dolfinx.fem.petsc
@@ -106,6 +106,7 @@ forward_problem = dolfinx.fem.petsc.LinearProblem(
     bilinear_form,
     linear_form,
     bcs=[boundary_condition],
+    petsc_options_prefix="thermalblock_forward_",
     petsc_options={
         "ksp_type": "preonly",
         "pc_type": "lu",
@@ -237,6 +238,7 @@ def generate_dataset(
             adjoint_left,
             adjoint_right,
             bcs=[boundary_condition],
+            petsc_options_prefix="thermalblock_adjoint_",
             petsc_options={
                 "ksp_type": "preonly",
                 "pc_type": "lu",
